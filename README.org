@@ -1,0 +1,7 @@
+* 通用回收站
+
+
+** Depends On
+
+- bulma
+- django-orgs

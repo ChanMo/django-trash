@@ -1,0 +1,17 @@
+* DjangoTrash
+
+** Usage
+
+继承WithTrashModel
+#+BEGIN_SRC python
+  from trash.models import WithTrashModel
+
+  class Post(WithTrashModel, models.Model):
+      pass
+#+END_SRC
+
+
+展示的时候筛选
+#+BEGIN_SRC python
+  qs = Post.objects.filter(is_deleted=False)
+#+END_SRC

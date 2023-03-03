@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static utils_tags %}
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'backend/katex/katex.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'backend/css/inline_katex.css' %}">
+  <style>
+   .content p {
+     margin-bottom: .5rem !important;
+   }
+  </style>
+{% endblock %}
+{% block content %}
+  <section class="section">
+    <div class="container">
+      <h1 class="title">回收站</h1>
+
+      <div class="level" >
+	<div class="level-left" >
+	  <div class="level-item" >
+	    {% include 'search_bar.html' %}
+	  </div>
+	</div>
+	<div class="level-right" >
+	</div>
+      </div>
+
+      {% include "messages.html" %}
+      {% if page_obj %}
+	<div class="tabs">
+	  <ul>
+	    {% for row in content_type_list %}
+	      <li {% if filter.form.content_type.value == row.id|slugify %}class="is-active"{% endif %}>
+		<a href="?content_type={{row.id}}">{{row.name}}</a>
+	      </li>
+	    {% endfor %}
+	  </ul>
+	</div>
+	<div class="table-container">
+	  <table class="table is-fullwidth is-bordered">
+	    <thead>
+	      <tr>
+		<th>内容</th>
+		<th>用户</th>
+		<th>加入回收站时间</th>
+		<th>操作</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      {% for row in page_obj %}
+		<tr>
+		  <td style0="width:640px;">{{row.content_object}}</td>
+		  <td>{{row.user}}</td>
+		  <td>{{row.created_at}}</td>
+		  <td>
+		    <div class="buttons">
+		      <a class="button is-small is-outlined is-danger" href="{% url "orgs:trash:delete" request.org.slug row.pk %}">永久删除</a>
+		      <a class="button is-small is-outlined" href="{% url "orgs:trash:cancel" request.org.slug row.pk %}">恢复</a>
+		    </div>
+		  </td>
+		</tr>
+	      {% endfor %}
+	    </tbody>
+	  </table>
+	</div>
+	{% include "pagination.html" %}
+      {% else %}
+	{% include "empty.html" %}
+      {% endif %}
+    </div>
+</section>
+{% endblock %}
